@@ -1,0 +1,26 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-in-the-berthing-page-content-area-replace-the-ui-content-rendered-under-both-selected-elements-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-and-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-div-2-with-a-structured-display-of-the-provided-infrastructure-object-grouped-by-category-and-rendered-as-card-based-sections",
+      "featureTitle": "In the Berthing page content area, replace the UI content rendered under both selected elements (`/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]` and `/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]`) with a structured display of the provided `infrastructure` object, grouped by category and rendered as card-based sections.",
+      "files": [
+        "frontend/src/pages/berthing/BerthingPage.tsx",
+        "frontend/src/pages/berthing/InfrastructureGroupedCards.tsx",
+        "frontend/src/services/queries.ts",
+        "frontend/src/types/temaPort.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

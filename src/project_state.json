@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build a Tema Port berthing page UI that displays port marine assets (tugboats) and infrastructure data as card-based, grouped sections, replacing existing selected sections.",
+  "architectural_notes": [
+    "UI sections should support full replacement with data-driven card layouts.",
+    "Infrastructure UI should render grouped sections by category with structured cards per item."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-in-the-berthing-page-content-area-replace-the-ui-content-rendered-under-both-selected-elements-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-and-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-div-2-with-a-structured-display-of-the-provided-infrastructure-object-grouped-by-category-and-rendered-as-card-based-sections",
+      "title": "In the Berthing page content area, replace the UI content rendered under both selected elements (`/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]` and `/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]`) with a structured display of the provided `infrastructure` object, grouped by category and rendered as card-based sections.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Replace the selected section with cards showing all available tugboats from provided Tema Port data.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Replace both selected elements with the full infrastructure object displayed as structured cards grouped by category (terminal_3_mps, main_harbour_quays, specialized_industrial, tema_shipyard).",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Replace selected Berthing page sections with grouped infrastructure cards",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

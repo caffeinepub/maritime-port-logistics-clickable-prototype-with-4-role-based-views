@@ -1,0 +1,51 @@
+{
+  "kind": "build_request",
+  "title": "Replace selected Berthing page sections with grouped infrastructure cards",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "In the Berthing page content area, replace the UI content rendered under both selected elements (`/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]` and `/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]`) with a structured display of the provided `infrastructure` object, grouped by category and rendered as card-based sections.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "it should  fully replaced with the entire infrastructure object you provided, data be displayed as structured cards (like the tugboats), yes as separate grouped sections in ui",
+          "start building"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The existing content currently rendered in the selected Berthing page sections is no longer visible (e.g., Port metadata/KPIs table, berthing points viewer/filter UI, etc., if those are what currently occupy the selected DOM nodes).",
+        "The replacement UI renders exactly these four group sections (as visible headings): `terminal_3_mps`, `main_harbour_quays`, `specialized_industrial`, `tema_shipyard`.",
+        "Each group section renders one card per entry in that group, using consistent card styling across groups.",
+        "Cards display the fields from the provided object clearly with English labels: for terminal_3_mps show berth, draft, type; for main_harbour_quays show berth, quay, draft; for specialized_industrial show name, location, draft, cargo; for tema_shipyard show dock, dimensions, capacity, primary_use.",
+        "Layout is responsive: cards flow in a grid on wider screens and a single column on narrow screens."
+      ]
+    }
+  ],
+  "constraints": [
+    "Apply changes ONLY to the two selected elements identified by the provided XPath expressions; do not change unrelated parts of the UI outside those DOM regions.",
+    "Use English for any user-facing text.",
+    "Do not edit any files under `frontend/src/components/ui` or any other `frontend.immutablePaths` listed in SYSTEM_CONTEXT."
+  ],
+  "nonGoals": [
+    "Do not implement or modify tugboat cards in this change (even if discussed earlier), unless they are within the selected XPath elements.",
+    "Do not add new filters, berth viewer features, or additional datasets beyond the provided `infrastructure` object."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

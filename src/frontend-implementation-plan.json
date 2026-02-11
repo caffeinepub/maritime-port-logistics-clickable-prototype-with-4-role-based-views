@@ -1,0 +1,40 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Berthing page: replace selected sections with grouped infrastructure cards",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Replace the two selected Berthing page content sections with a responsive, grouped card UI rendering the provided infrastructure object.",
+      "acceptanceCriteria": [
+        "The existing content currently rendered in the selected Berthing page sections is no longer visible (e.g., Port metadata/KPIs table, berthing points viewer/filter UI, etc., if those are what currently occupy the selected DOM nodes).",
+        "The replacement UI renders exactly these four group sections (as visible headings): `terminal_3_mps`, `main_harbour_quays`, `specialized_industrial`, `tema_shipyard`.",
+        "Each group section renders one card per entry in that group, using consistent card styling across groups.",
+        "Cards display the fields from the provided object clearly with English labels: for terminal_3_mps show berth, draft, type; for main_harbour_quays show berth, quay, draft; for specialized_industrial show name, location, draft, cargo; for tema_shipyard show dock, dimensions, capacity, primary_use.",
+        "Layout is responsive: cards flow in a grid on wider screens and a single column on narrow screens."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/berthing/InfrastructureGroupedCards.tsx",
+          "operation": "create",
+          "description": "Create a Berthing-scoped component that renders the provided infrastructure object as four grouped sections with headings matching the required keys and a responsive card grid. Use the shadcn-ui Card component to provide consistent card styling across groups. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/types/temaPort.ts",
+          "operation": "modify",
+          "description": "Extend the Port of Tema frontend types to represent the provided grouped infrastructure object (including the four required groups and their entry field shapes) and add it to the PortOfTemaData shape so the Berthing page can render it."
+        },
+        {
+          "path": "frontend/src/services/queries.ts",
+          "operation": "modify",
+          "description": "Update the PortOfTemaData transformation to include the provided grouped infrastructure object (as a frontend-sourced constant matching the required groups/fields) so the Berthing page can render it without introducing new datasets or UI beyond that object."
+        },
+        {
+          "path": "frontend/src/pages/berthing/BerthingPage.tsx",
+          "operation": "modify",
+          "description": "Within the two selected DOM regions currently occupied by the PortOfTemaOverview and the Berthing Points viewer/filter UI, fully replace rendered content with the new grouped infrastructure cards component. Ensure the previous overview/table/filters/tabs/detail drawer are no longer rendered in those regions, and keep all changes scoped to those regions only."
+        }
+      ]
+    }
+  ]
+}

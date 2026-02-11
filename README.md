@@ -1,2 +1,3 @@
-# maritime-port-logistics-clickable-prototype-with-4-role-based-views
-Exported from Caffeine project: Replace selected Berthing page sections with grouped infrastructure cards
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

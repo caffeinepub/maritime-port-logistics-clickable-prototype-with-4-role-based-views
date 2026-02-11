@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    
+    /* Harbor Dark Theme - Industrial/Nautical */
+    --background: 0.18 0.015 240;
+    --foreground: 0.95 0.01 240;
+    
+    --card: 0.22 0.015 240;
+    --card-foreground: 0.95 0.01 240;
+    
+    --popover: 0.22 0.015 240;
+    --popover-foreground: 0.95 0.01 240;
+    
+    --primary: 0.55 0.12 200;
+    --primary-foreground: 0.98 0.01 240;
+    
+    --secondary: 0.30 0.015 240;
+    --secondary-foreground: 0.95 0.01 240;
+    
+    --muted: 0.30 0.015 240;
+    --muted-foreground: 0.65 0.01 240;
+    
+    --accent: 0.45 0.15 195;
+    --accent-foreground: 0.98 0.01 240;
+    
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.01 240;
+    
+    --border: 0.35 0.015 240;
+    --input: 0.30 0.015 240;
+    --ring: 0.55 0.12 200;
+    
+    /* Custom harbor colors */
+    --harbor-dark: 0.18 0.015 240;
+    --harbor-darker: 0.15 0.015 240;
+    --harbor-light: 0.95 0.01 240;
+    --harbor-muted: 0.65 0.01 240;
+    --harbor-steel: 0.45 0.02 240;
+    --harbor-accent: 0.55 0.15 195;
+    --harbor-success: 0.65 0.18 145;
+    --harbor-warning: 0.70 0.20 65;
+  }
+
+  .dark {
+    --background: 0.15 0.015 240;
+    --foreground: 0.95 0.01 240;
+    
+    --card: 0.20 0.015 240;
+    --card-foreground: 0.95 0.01 240;
+    
+    --popover: 0.20 0.015 240;
+    --popover-foreground: 0.95 0.01 240;
+    
+    --primary: 0.60 0.12 200;
+    --primary-foreground: 0.98 0.01 240;
+    
+    --secondary: 0.28 0.015 240;
+    --secondary-foreground: 0.95 0.01 240;
+    
+    --muted: 0.28 0.015 240;
+    --muted-foreground: 0.65 0.01 240;
+    
+    --accent: 0.50 0.15 195;
+    --accent-foreground: 0.98 0.01 240;
+    
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.01 240;
+    
+    --border: 0.30 0.015 240;
+    --input: 0.28 0.015 240;
+    --ring: 0.60 0.12 200;
+    
+    --harbor-dark: 0.15 0.015 240;
+    --harbor-darker: 0.12 0.015 240;
+    --harbor-light: 0.95 0.01 240;
+    --harbor-muted: 0.65 0.01 240;
+    --harbor-steel: 0.45 0.02 240;
+    --harbor-accent: 0.60 0.15 195;
+    --harbor-success: 0.65 0.18 145;
+    --harbor-warning: 0.70 0.20 65;
+  }
+
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-harbor-dark {
+    color: oklch(var(--harbor-dark));
+  }
+  .text-harbor-darker {
+    color: oklch(var(--harbor-darker));
+  }
+  .text-harbor-light {
+    color: oklch(var(--harbor-light));
+  }
+  .text-harbor-muted {
+    color: oklch(var(--harbor-muted));
+  }
+  .text-harbor-steel {
+    color: oklch(var(--harbor-steel));
+  }
+  .text-harbor-accent {
+    color: oklch(var(--harbor-accent));
+  }
+  .text-harbor-success {
+    color: oklch(var(--harbor-success));
+  }
+  .text-harbor-warning {
+    color: oklch(var(--harbor-warning));
+  }
+  
+  .bg-harbor-dark {
+    background-color: oklch(var(--harbor-dark));
+  }
+  .bg-harbor-darker {
+    background-color: oklch(var(--harbor-darker));
+  }
+  .bg-harbor-light {
+    background-color: oklch(var(--harbor-light));
+  }
+  .bg-harbor-muted {
+    background-color: oklch(var(--harbor-muted));
+  }
+  .bg-harbor-steel {
+    background-color: oklch(var(--harbor-steel));
+  }
+  .bg-harbor-accent {
+    background-color: oklch(var(--harbor-accent));
+  }
+  .bg-harbor-success {
+    background-color: oklch(var(--harbor-success));
+  }
+  .bg-harbor-warning {
+    background-color: oklch(var(--harbor-warning));
+  }
+  
+  .border-harbor-steel {
+    border-color: oklch(var(--harbor-steel));
+  }
+  .border-harbor-accent {
+    border-color: oklch(var(--harbor-accent));
+  }
+  .border-harbor-success {
+    border-color: oklch(var(--harbor-success));
+  }
+  .border-harbor-warning {
+    border-color: oklch(var(--harbor-warning));
+  }
+}
