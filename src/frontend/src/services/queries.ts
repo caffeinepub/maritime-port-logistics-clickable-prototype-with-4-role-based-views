@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useBackendActor, QUERY_KEYS } from './backendClient';
-import type { Port, PortGeoLocation } from '../backend';
+import type { Port, PortGeoLocation, Tugboat as BackendTugboat } from '../backend';
 import type { Vessel, Berth, Tugboat, Assignment, Alert } from '../types/legacy';
 import type { PortOfTemaData, BerthingPoint, DryDockingStation, PortMetadata, Infrastructure, GroupedInfrastructure } from '../types/temaPort';
 
@@ -46,11 +46,15 @@ export function useBerth(id: bigint) {
 }
 
 export function useTugboats() {
-  return useQuery<Tugboat[]>({
+  const { actor, isFetching } = useBackendActor();
+
+  return useQuery<BackendTugboat[]>({
     queryKey: QUERY_KEYS.tugboats,
     queryFn: async () => {
-      return [];
+      if (!actor) return [];
+      return actor.getAllTugboats();
     },
+    enabled: !!actor && !isFetching,
     staleTime: 30000,
   });
 }

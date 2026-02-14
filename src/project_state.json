@@ -1,19 +1,28 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Build a Tema Port berthing page UI that displays port marine assets (tugboats) and infrastructure data as card-based, grouped sections, replacing existing selected sections.",
+  "summary": "Project to display a tugboat list as cards on a tugboat page, with data stored in a backend canister (Motoko type) and dynamically fetched on each page load; selected element content is fully replaced by these cards.",
   "architectural_notes": [
-    "UI sections should support full replacement with data-driven card layouts.",
-    "Infrastructure UI should render grouped sections by category with structured cards per item."
+    "Store tugboats in backend canister as a dedicated Motoko Tugboat record type and collection.",
+    "Frontend fetches tugboat list from backend canister on every page load (dynamic, not static).",
+    "Tugboat page selected element should replace all existing content with tugboat cards UI."
   ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-in-the-berthing-page-content-area-replace-the-ui-content-rendered-under-both-selected-elements-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-and-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-div-2-with-a-structured-display-of-the-provided-infrastructure-object-grouped-by-category-and-rendered-as-card-based-sections",
-      "title": "In the Berthing page content area, replace the UI content rendered under both selected elements (`/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]` and `/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]`) with a structured display of the provided `infrastructure` object, grouped by category and rendered as card-based sections.",
+      "id": "feature-frontend-implement-a-react-query-hook-to-fetch-the-tugboat-list-from-the-backend-canister-on-each-tugboats-page-load-and-wire-it-to-the-tugboats-page-ui-state-loading-error-empty",
+      "title": "Frontend: Implement a React Query hook to fetch the tugboat list from the backend canister on each Tugboats page load, and wire it to the Tugboats page UI state (loading/error/empty).",
       "reqIds": [
-        "REQ-1"
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-frontend-selected-element-only-on-the-tugboats-page-replace-the-existing-content-rendered-inside-the-selected-element-at-xpath-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-with-a-card-based-layout-that-displays-the-fetched-tugboats-and-nothing-else-as-individual-cards",
+      "title": "Frontend (selected element only): On the Tugboats page, replace the existing content rendered inside the selected element at XPath /html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1] with a card-based layout that displays the fetched tugboats (and nothing else) as individual cards.",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
@@ -21,18 +30,20 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Replace the selected section with cards showing all available tugboats from provided Tema Port data.",
+      "summary": "Add tugboat data model in Motoko backend canister and dynamically fetch/display tugboats as cards on tugboat page, replacing selected element’s existing content",
       "reqIds": [],
-      "status": "pending"
+      "status": "in_progress"
     },
     {
       "id": "AR-2",
-      "summary": "Replace both selected elements with the full infrastructure object displayed as structured cards grouped by category (terminal_3_mps, main_harbour_quays, specialized_industrial, tema_shipyard).",
-      "reqIds": [],
+      "summary": "Backend: Add a dedicated Motoko Tugboat data model and store the provided 6 tugboats in the backend canister so they can be fetched dynamically by the frontend.",
+      "reqIds": [
+        "REQ-1"
+      ],
       "status": "pending"
     }
   ],
-  "projectName": "Replace selected Berthing page sections with grouped infrastructure cards",
+  "projectName": "Add backend-stored tugboat list and display as cards on Tugboats page",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

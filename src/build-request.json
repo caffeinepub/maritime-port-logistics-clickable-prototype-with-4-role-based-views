@@ -1,38 +1,77 @@
 {
   "kind": "build_request",
-  "title": "Replace selected Berthing page sections with grouped infrastructure cards",
+  "title": "Add backend-stored tugboat list and display as cards on Tugboats page",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "In the Berthing page content area, replace the UI content rendered under both selected elements (`/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]` and `/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]`) with a structured display of the provided `infrastructure` object, grouped by category and rendered as card-based sections.",
-      "target": "frontend",
+      "text": "Backend: Add a dedicated Motoko Tugboat data model and store the provided 6 tugboats in the backend canister so they can be fetched dynamically by the frontend.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-1",
+          "msg-2"
         ],
         "quotes": [
-          "it should  fully replaced with the entire infrastructure object you provided, data be displayed as structured cards (like the tugboats), yes as separate grouped sections in ui",
-          "start building"
+          "add these tugboats : \"tugboats\": [ ... ] to tugboat page ... want it stored in the backend canister for dynamic use",
+          "these tugboats as a new dedicated Motoko data type"
         ]
       },
       "acceptanceCriteria": [
-        "The existing content currently rendered in the selected Berthing page sections is no longer visible (e.g., Port metadata/KPIs table, berthing points viewer/filter UI, etc., if those are what currently occupy the selected DOM nodes).",
-        "The replacement UI renders exactly these four group sections (as visible headings): `terminal_3_mps`, `main_harbour_quays`, `specialized_industrial`, `tema_shipyard`.",
-        "Each group section renders one card per entry in that group, using consistent card styling across groups.",
-        "Cards display the fields from the provided object clearly with English labels: for terminal_3_mps show berth, draft, type; for main_harbour_quays show berth, quay, draft; for specialized_industrial show name, location, draft, cargo; for tema_shipyard show dock, dimensions, capacity, primary_use.",
-        "Layout is responsive: cards flow in a grid on wider screens and a single column on narrow screens."
+        "A Motoko Tugboat type exists with fields that can represent: id, name, built, bollard_pull, type.",
+        "The backend canister stores exactly the 6 user-provided tugboats (TUG-01 through TUG-06) in canister state.",
+        "The stored tugboats can be retrieved via a public query method (e.g., getAllTugboats) returning an array of Tugboat records.",
+        "Candid/TypeScript declarations generated for the backend include the Tugboat type and the new query method."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Frontend: Implement a React Query hook to fetch the tugboat list from the backend canister on each Tugboats page load, and wire it to the Tugboats page UI state (loading/error/empty).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "dynamically fetch the tugboat list from the backend every time it loads"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The tugboat query no longer returns a hard-coded empty array; it calls the backend actor method added in REQ-1.",
+        "The query is enabled only when the backend actor is available (consistent with existing actor-gated queries).",
+        "Loading and error states are displayed using existing QueryState components (LoadingSkeleton/ErrorState), and an empty state is shown when the list is empty."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Frontend (selected element only): On the Tugboats page, replace the existing content rendered inside the selected element at XPath /html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1] with a card-based layout that displays the fetched tugboats (and nothing else) as individual cards.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-2"
+        ],
+        "quotes": [
+          "data be displayed inside the selected element as cards, replace the element’s existing content",
+          "selected element display only these tugboat cards (replacing all existing content completely)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The selected content area no longer renders the current header/table/health-drawer content; it renders only tugboat cards.",
+        "Each tugboat is displayed as a Card showing at minimum: ID, Name, Built (year), Bollard pull, Type.",
+        "Cards are laid out responsively (e.g., 1 column on small screens, 2–3 columns on larger screens) with consistent spacing.",
+        "All user-facing text in this new card area is in English."
       ]
     }
   ],
   "constraints": [
-    "Apply changes ONLY to the two selected elements identified by the provided XPath expressions; do not change unrelated parts of the UI outside those DOM regions.",
-    "Use English for any user-facing text.",
-    "Do not edit any files under `frontend/src/components/ui` or any other `frontend.immutablePaths` listed in SYSTEM_CONTEXT."
+    "Do not edit files under frontend immutable paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui).",
+    "Apply UI changes only to the content rendered within the selected element XPath (/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]); do not redesign other pages/areas."
   ],
   "nonGoals": [
-    "Do not implement or modify tugboat cards in this change (even if discussed earlier), unless they are within the selected XPath elements.",
-    "Do not add new filters, berth viewer features, or additional datasets beyond the provided `infrastructure` object."
+    "Do not implement tugboat create/edit/delete UI or any admin management flows.",
+    "Do not add third-party authentication; use existing Internet Identity integration only if needed (not required for read-only tugboat fetching).",
+    "Do not add real-time updates (WebSockets) or background subscriptions; standard React Query fetching is sufficient."
   ],
   "imageRequirements": {
     "required": [],

@@ -1,68 +1,58 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T19:33:37.537Z",
-  "summary": "REQ-1 is partially implemented: a new grouped card UI component is added and BerthingPage now renders it, but several acceptance criteria are not met (exact section headings, required field labeling, and strict scope/non-goal constraints appear violated by additional data transformations).",
+  "generatedAt": "2026-02-11T20:43:41.234Z",
+  "summary": "Frontend now fetches tugboats via a React Query hook calling a backend actor method name (`getAllTugboats`) and TugboatsPage renders a responsive grid of tugboat cards with loading/error/empty states. However, the backend changes shown do not include seeding exactly 6 provided tugboats nor a public `getAllTugboats` query implementation, and the TugboatsPage content includes additional header elements and hard-codes a tugboat “Type” value rather than using a backend-provided field.",
   "missing_requirements": [
     {
       "id": "REQ-1",
-      "requirement": "Render exactly these four group sections as visible headings: `terminal_3_mps`, `main_harbour_quays`, `specialized_industrial`, `tema_shipyard`.",
-      "reason": "The diff shows human-friendly title-cased headings (e.g., \"Terminal 3 MPS\", \"Main Harbour Quays\", \"Specialized Industrial\") rather than the exact required heading strings.",
+      "requirement": "Backend stores exactly the 6 provided tugboats (TUG-01 through TUG-06) in canister state and exposes a public query method (e.g., getAllTugboats) returning an array of Tugboat records; generated candid/TS declarations include the Tugboat type and method.",
+      "reason": "Diff shows a Tugboat type and an empty tugboats map, but no evidence of initializing/storing the 6 user-provided tugboats in canister state and no evidence of an implemented public query method `getAllTugboats` in the backend actor. Also no evidence of candid/TS declaration regeneration in the diff summary.",
       "evidence": [
-        "frontend/src/pages/berthing/InfrastructureGroupedCards.tsx"
+        "backend/main.mo",
+        "backend/migration.mo",
+        "frontend/src/services/queries.ts"
       ]
     },
     {
-      "id": "REQ-1",
-      "requirement": "Cards display required fields with English labels; for terminal_3_mps show berth, draft, type; for main_harbour_quays show berth, quay, draft.",
-      "reason": "For terminal_3_mps and main_harbour_quays, `berth` is displayed as the card title without an explicit \"Berth:\" label, while other fields use labeled rows (e.g., \"Draft:\", \"Type:\", \"Quay:\"). This does not clearly meet the requirement of showing fields with English labels.",
+      "id": "REQ-3",
+      "requirement": "Within the selected Tugboats page content area, render only tugboat cards (no header/table/health-drawer content) and each card must show ID, Name, Built (year), Bollard pull, and Type from fetched data.",
+      "reason": "TugboatsPage still renders a page header section (title/description and an image) in addition to the card grid, and the card 'Type' is hard-coded as \"ASD\" rather than coming from a fetched `type` field (the backend Tugboat type shown also does not include a `type` field).",
       "evidence": [
-        "frontend/src/pages/berthing/InfrastructureGroupedCards.tsx"
-      ]
-    },
-    {
-      "id": "REQ-1",
-      "requirement": "Apply changes ONLY to the two selected elements identified by the provided XPath expressions; do not change unrelated parts of the UI outside those DOM regions.",
-      "reason": "The diff replaces the entire BerthingPage layout/content with a new header and a single InfrastructureGroupedCards section. From the diff summary, it is not possible to confirm that changes are constrained strictly to the two specified DOM regions; it appears broader than targeted replacement.",
-      "evidence": [
-        "frontend/src/pages/berthing/BerthingPage.tsx"
-      ]
-    },
-    {
-      "id": "REQ-1",
-      "requirement": "Do not add new filters, berth viewer features, or additional datasets beyond the provided `infrastructure` object.",
-      "reason": "`usePortOfTemaData` now constructs/returns additional datasets and structures (metadata, infrastructure KPI counts, berthing_points, dry_docking_stations, grouped_infrastructure). This goes beyond rendering only the provided `infrastructure` object.",
-      "evidence": [
-        "frontend/src/services/queries.ts",
-        "frontend/src/types/temaPort.ts",
-        "frontend/src/pages/berthing/BerthingPage.tsx"
+        "frontend/src/pages/tugboats/TugboatsPage.tsx",
+        "backend/main.mo"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added/returned additional Port of Tema datasets and transformations (metadata, infrastructure KPI counts, berthing_points parsing, dry_docking_stations parsing, grouped_infrastructure generation) beyond the requested `infrastructure`-grouped card display.",
-      "reason": "BuildRequest explicitly restricts scope to displaying the provided `infrastructure` object in the selected Berthing page sections and disallows adding additional datasets beyond that object.",
+      "description": "Added a migration module and expanded backend state/schema (ports + tugboats with additional fields like engine_power_hp, length_m, flag, port) beyond the requested Tugboat fields (id, name, built, bollard_pull, type).",
+      "reason": "REQ-1 only asked for a dedicated Tugboat model with fields to represent id/name/built/bollard_pull/type and storing 6 tugboats; the diff introduces broader schema changes and a migration structure not requested.",
       "evidence": [
-        "frontend/src/services/queries.ts",
-        "frontend/src/types/temaPort.ts"
+        "backend/migration.mo",
+        "backend/main.mo"
       ]
     },
     {
-      "description": "Stubbed/modified multiple legacy query hooks to return empty arrays/null (vessels, berths, tugboats, assignments, alerts).",
-      "reason": "Not requested by the BuildRequest; this is unrelated to replacing the Berthing page selected sections with infrastructure cards.",
+      "description": "Updated unrelated dashboard and vessel detail UI to use tugboat backend fields and added health/utilization simulation logic.",
+      "reason": "BuildRequest focuses on Tugboats page card display and tugboat fetching; changes to MaintenanceDashboard, TugDispatcherDashboard, and VesselDetailPanel are not requested.",
       "evidence": [
-        "frontend/src/services/queries.ts"
+        "frontend/src/pages/dashboards/MaintenanceDashboard.tsx",
+        "frontend/src/pages/dashboards/TugDispatcherDashboard.tsx",
+        "frontend/src/pages/vessels/VesselDetailPanel.tsx"
       ]
     }
   ],
   "confidence": 0.74,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/pages/berthing/BerthingPage.tsx",
-    "frontend/src/pages/berthing/InfrastructureGroupedCards.tsx",
+    "frontend/src/pages/dashboards/MaintenanceDashboard.tsx",
+    "frontend/src/pages/dashboards/TugDispatcherDashboard.tsx",
+    "frontend/src/pages/tugboats/TugboatsPage.tsx",
+    "frontend/src/pages/vessels/VesselDetailPanel.tsx",
     "frontend/src/services/queries.ts",
-    "frontend/src/types/temaPort.ts",
     "project_state.json"
   ]
 }

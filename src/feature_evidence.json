@@ -2,13 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-in-the-berthing-page-content-area-replace-the-ui-content-rendered-under-both-selected-elements-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-and-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-div-2-with-a-structured-display-of-the-provided-infrastructure-object-grouped-by-category-and-rendered-as-card-based-sections",
-      "featureTitle": "In the Berthing page content area, replace the UI content rendered under both selected elements (`/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]` and `/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]`) with a structured display of the provided `infrastructure` object, grouped by category and rendered as card-based sections.",
+      "featureId": "feature-frontend-implement-a-react-query-hook-to-fetch-the-tugboat-list-from-the-backend-canister-on-each-tugboats-page-load-and-wire-it-to-the-tugboats-page-ui-state-loading-error-empty",
+      "featureTitle": "Frontend: Implement a React Query hook to fetch the tugboat list from the backend canister on each Tugboats page load, and wire it to the Tugboats page UI state (loading/error/empty).",
       "files": [
-        "frontend/src/pages/berthing/BerthingPage.tsx",
-        "frontend/src/pages/berthing/InfrastructureGroupedCards.tsx",
-        "frontend/src/services/queries.ts",
-        "frontend/src/types/temaPort.ts"
+        "frontend/src/pages/tugboats/TugboatsPage.tsx",
+        "frontend/src/services/queries.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -18,7 +16,25 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-1"
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-frontend-selected-element-only-on-the-tugboats-page-replace-the-existing-content-rendered-inside-the-selected-element-at-xpath-html-1-body-1-div-1-div-1-div-1-main-1-div-1-div-1-with-a-card-based-layout-that-displays-the-fetched-tugboats-and-nothing-else-as-individual-cards",
+      "featureTitle": "Frontend (selected element only): On the Tugboats page, replace the existing content rendered inside the selected element at XPath /html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1] with a card-based layout that displays the fetched tugboats (and nothing else) as individual cards.",
+      "files": [
+        "frontend/src/pages/tugboats/TugboatsPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

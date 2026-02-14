@@ -3,17 +3,18 @@ import Nat "mo:core/Nat";
 import Array "mo:core/Array";
 import List "mo:core/List";
 import Iter "mo:core/Iter";
+import Migration "migration";
 
-
-// Stateful actor, persisting state across upgrades
-
+(with migration = Migration.run)
 actor {
   // State
   var lastPortId : Nat = 0;
+  var lastTugboatId : Nat = 0;
 
   // Persistent, globally accessible list of Ports
   // Empty at initialization, filled from HTTP outcall or by user action
   let ports : Map.Map<Nat, Port> = Map.empty<Nat, Port>();
+  let tugboats = Map.empty<Nat, Tugboat>();
 
   /// PortGeoLocation struct
   type PortGeoLocation = {
@@ -34,6 +35,17 @@ actor {
     id : Nat; // Added port id field
     geoPoints : [PortGeoLocation];
     warehouses : [Text];
+  };
+
+  type Tugboat = {
+    id : Nat;
+    name : Text;
+    engine_power_hp : Nat;
+    bollard_pull_ton : Nat;
+    length_m : Nat;
+    year_built : Nat;
+    flag : Text;
+    port : Text;
   };
 
   // Add port and return new id
@@ -192,5 +204,94 @@ actor {
       warehouses = ["Warehouse 1", "Warehouse 2", "Warehouse 3"];
     };
     portOfTema;
+  };
+
+  // Tugboat services for Port of Tema
+  public shared ({ caller }) func addTugboatsForTemaPort() : async () {
+    let tugboatsData : [Tugboat] = [
+      // Azumah Tugboat
+      {
+        id = lastTugboatId + 1;
+        name = "Azumah";
+        engine_power_hp = 4000;
+        bollard_pull_ton = 45;
+        length_m = 28;
+        year_built = 2008;
+        flag = "Ghana";
+        port = "Port of Tema";
+      },
+      // Ayele Tugboat
+      {
+        id = lastTugboatId + 2;
+        name = "Ayele";
+        engine_power_hp = 3600;
+        bollard_pull_ton = 40;
+        length_m = 27;
+        year_built = 2005;
+        flag = "Ghana";
+        port = "Port of Tema";
+      },
+      // Nyankopon Tugboat
+      {
+        id = lastTugboatId + 3;
+        name = "Nyankopon";
+        engine_power_hp = 4200;
+        bollard_pull_ton = 46;
+        length_m = 29;
+        year_built = 2010;
+        flag = "Ghana";
+        port = "Port of Tema";
+      },
+      // Mary Tugboat
+      {
+        id = lastTugboatId + 4;
+        name = "Mary";
+        engine_power_hp = 3800;
+        bollard_pull_ton = 42;
+        length_m = 28;
+        year_built = 2007;
+        flag = "Ghana";
+        port = "Port of Tema";
+      },
+      // Theresa Tugboat
+      {
+        id = lastTugboatId + 5;
+        name = "Theresa";
+        engine_power_hp = 3700;
+        bollard_pull_ton = 41;
+        length_m = 27;
+        year_built = 2006;
+        flag = "Ghana";
+        port = "Port of Tema";
+      },
+      // Propont Tugboat
+      {
+        id = lastTugboatId + 6;
+        name = "Propont";
+        engine_power_hp = 4100;
+        bollard_pull_ton = 44;
+        length_m = 29;
+        year_built = 2009;
+        flag = "Ghana";
+        port = "Port of Tema";
+      }
+    ];
+
+    for (tugboat in tugboatsData.values()) {
+      tugboats.add(tugboat.id, tugboat);
+      lastTugboatId := tugboat.id;
+    };
+  };
+
+  public query ({ caller }) func getAllTugboats() : async [Tugboat] {
+    tugboats.values().toArray();
+  };
+
+  public query ({ caller }) func getTugboatsByPort(portName : Text) : async [Tugboat] {
+    tugboats.values().toArray().filter(func(tb) { tb.port == portName });
+  };
+
+  public query ({ caller }) func getTugboatById(id : Nat) : async ?Tugboat {
+    tugboats.get(id);
   };
 };

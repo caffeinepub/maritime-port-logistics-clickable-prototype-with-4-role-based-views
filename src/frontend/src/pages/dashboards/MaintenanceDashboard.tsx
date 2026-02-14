@@ -19,9 +19,9 @@ export function MaintenanceDashboard() {
     return <ErrorState error={tugboatsError as Error} />;
   }
 
-  // Simulate health status based on capacity (for prototype)
+  // Simulate health status based on engine power (for prototype)
   const tugboatsWithHealth = tugboats.map((tug) => {
-    const healthScore = Number(tug.capacity) > 5500 ? 95 : Number(tug.capacity) > 5000 ? 75 : 60;
+    const healthScore = Number(tug.engine_power_hp) > 4000 ? 95 : Number(tug.engine_power_hp) > 3700 ? 75 : 60;
     const status = healthScore >= 90 ? 'operational' : healthScore >= 70 ? 'degraded' : 'out-of-service';
     return { ...tug, healthScore, status };
   });
@@ -56,7 +56,7 @@ export function MaintenanceDashboard() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Equipment</TableHead>
-                  <TableHead>Capacity</TableHead>
+                  <TableHead>Engine Power</TableHead>
                   <TableHead>Health Score</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Utilization</TableHead>
@@ -70,7 +70,7 @@ export function MaintenanceDashboard() {
                   return (
                     <TableRow key={tug.id.toString()}>
                       <TableCell className="font-medium">{tug.name}</TableCell>
-                      <TableCell className="text-harbor-muted">{tug.capacity.toString()} kW</TableCell>
+                      <TableCell className="text-harbor-muted">{tug.engine_power_hp.toString()} HP</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Progress value={tug.healthScore} className="w-20" />

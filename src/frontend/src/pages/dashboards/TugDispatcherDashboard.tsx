@@ -49,7 +49,7 @@ export function TugDispatcherDashboard() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Tugboat</TableHead>
-                  <TableHead>Capacity</TableHead>
+                  <TableHead>Bollard Pull</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Current Assignment</TableHead>
                 </TableRow>
@@ -63,7 +63,7 @@ export function TugDispatcherDashboard() {
                   return (
                     <TableRow key={tug.id.toString()}>
                       <TableCell className="font-medium">{tug.name}</TableCell>
-                      <TableCell className="text-harbor-muted">{tug.capacity.toString()} kW</TableCell>
+                      <TableCell className="text-harbor-muted">{tug.bollard_pull_ton.toString()}t</TableCell>
                       <TableCell>
                         <StatusBadge status={isAvailable ? 'Available' : 'Assigned'} type="tugboat" />
                       </TableCell>

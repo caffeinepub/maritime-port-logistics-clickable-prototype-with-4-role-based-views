@@ -89,7 +89,7 @@ export function VesselDetailPanel({ vessel, open, onOpenChange }: VesselDetailPa
                 {assignedTugs.map((tug) => (
                   <li key={tug.id.toString()} className="flex items-center justify-between rounded-md border border-harbor-steel/30 p-3">
                     <span className="font-medium">{tug.name}</span>
-                    <span className="text-sm text-harbor-muted">{tug.capacity.toString()} kW</span>
+                    <span className="text-sm text-harbor-muted">{tug.bollard_pull_ton.toString()}t</span>
                   </li>
                 ))}
               </ul>

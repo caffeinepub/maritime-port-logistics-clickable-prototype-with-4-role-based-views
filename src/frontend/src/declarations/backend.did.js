@@ -25,6 +25,16 @@ export const Port = IDL.Record({
   'coordinates' : IDL.Text,
   'warehouses' : IDL.Vec(IDL.Text),
 });
+export const Tugboat = IDL.Record({
+  'id' : IDL.Nat,
+  'year_built' : IDL.Nat,
+  'engine_power_hp' : IDL.Nat,
+  'length_m' : IDL.Nat,
+  'flag' : IDL.Text,
+  'name' : IDL.Text,
+  'port' : IDL.Text,
+  'bollard_pull_ton' : IDL.Nat,
+});
 
 export const idlService = IDL.Service({
   'addGeoPoint' : IDL.Func(
@@ -46,11 +56,15 @@ export const idlService = IDL.Service({
       [],
     ),
   'addPortOfTemaData' : IDL.Func([], [], []),
+  'addTugboatsForTemaPort' : IDL.Func([], [], []),
   'addWarehouse' : IDL.Func([IDL.Nat, IDL.Text], [], []),
   'cleanUpBerthingData' : IDL.Func([], [], []),
   'getAllPorts' : IDL.Func([], [IDL.Vec(Port)], ['query']),
+  'getAllTugboats' : IDL.Func([], [IDL.Vec(Tugboat)], ['query']),
   'getPortById' : IDL.Func([IDL.Nat], [IDL.Opt(Port)], ['query']),
   'getPortOfTemaData' : IDL.Func([], [Port], ['query']),
+  'getTugboatById' : IDL.Func([IDL.Nat], [IDL.Opt(Tugboat)], ['query']),
+  'getTugboatsByPort' : IDL.Func([IDL.Text], [IDL.Vec(Tugboat)], ['query']),
 });
 
 export const idlInitArgs = [];
@@ -73,6 +87,16 @@ export const idlFactory = ({ IDL }) => {
     'coordinates' : IDL.Text,
     'warehouses' : IDL.Vec(IDL.Text),
   });
+  const Tugboat = IDL.Record({
+    'id' : IDL.Nat,
+    'year_built' : IDL.Nat,
+    'engine_power_hp' : IDL.Nat,
+    'length_m' : IDL.Nat,
+    'flag' : IDL.Text,
+    'name' : IDL.Text,
+    'port' : IDL.Text,
+    'bollard_pull_ton' : IDL.Nat,
+  });
   
   return IDL.Service({
     'addGeoPoint' : IDL.Func(
@@ -94,11 +118,15 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'addPortOfTemaData' : IDL.Func([], [], []),
+    'addTugboatsForTemaPort' : IDL.Func([], [], []),
     'addWarehouse' : IDL.Func([IDL.Nat, IDL.Text], [], []),
     'cleanUpBerthingData' : IDL.Func([], [], []),
     'getAllPorts' : IDL.Func([], [IDL.Vec(Port)], ['query']),
+    'getAllTugboats' : IDL.Func([], [IDL.Vec(Tugboat)], ['query']),
     'getPortById' : IDL.Func([IDL.Nat], [IDL.Opt(Port)], ['query']),
     'getPortOfTemaData' : IDL.Func([], [Port], ['query']),
+    'getTugboatById' : IDL.Func([IDL.Nat], [IDL.Opt(Tugboat)], ['query']),
+    'getTugboatsByPort' : IDL.Func([IDL.Text], [IDL.Vec(Tugboat)], ['query']),
   });
 };
 

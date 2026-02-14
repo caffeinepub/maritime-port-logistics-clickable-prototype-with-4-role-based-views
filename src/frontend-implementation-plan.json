@@ -1,38 +1,43 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Berthing page: replace selected sections with grouped infrastructure cards",
+  "title": "Fetch backend tugboats and render card grid on Tugboats page",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Replace the two selected Berthing page content sections with a responsive, grouped card UI rendering the provided infrastructure object.",
+      "id": "REQ-2",
+      "summary": "Add a React Query hook that fetches tugboats from the backend actor on Tugboats page load and exposes loading/error/empty UI state.",
       "acceptanceCriteria": [
-        "The existing content currently rendered in the selected Berthing page sections is no longer visible (e.g., Port metadata/KPIs table, berthing points viewer/filter UI, etc., if those are what currently occupy the selected DOM nodes).",
-        "The replacement UI renders exactly these four group sections (as visible headings): `terminal_3_mps`, `main_harbour_quays`, `specialized_industrial`, `tema_shipyard`.",
-        "Each group section renders one card per entry in that group, using consistent card styling across groups.",
-        "Cards display the fields from the provided object clearly with English labels: for terminal_3_mps show berth, draft, type; for main_harbour_quays show berth, quay, draft; for specialized_industrial show name, location, draft, cargo; for tema_shipyard show dock, dimensions, capacity, primary_use.",
-        "Layout is responsive: cards flow in a grid on wider screens and a single column on narrow screens."
+        "The tugboat query no longer returns a hard-coded empty array; it calls the backend actor method added in REQ-1.",
+        "The query is enabled only when the backend actor is available (consistent with existing actor-gated queries).",
+        "Loading and error states are displayed using existing QueryState components (LoadingSkeleton/ErrorState), and an empty state is shown when the list is empty."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/berthing/InfrastructureGroupedCards.tsx",
-          "operation": "create",
-          "description": "Create a Berthing-scoped component that renders the provided infrastructure object as four grouped sections with headings matching the required keys and a responsive card grid. Use the shadcn-ui Card component to provide consistent card styling across groups. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/types/temaPort.ts",
-          "operation": "modify",
-          "description": "Extend the Port of Tema frontend types to represent the provided grouped infrastructure object (including the four required groups and their entry field shapes) and add it to the PortOfTemaData shape so the Berthing page can render it."
-        },
-        {
           "path": "frontend/src/services/queries.ts",
           "operation": "modify",
-          "description": "Update the PortOfTemaData transformation to include the provided grouped infrastructure object (as a frontend-sourced constant matching the required groups/fields) so the Berthing page can render it without introducing new datasets or UI beyond that object."
+          "description": "Update the tugboat query hook to call the backend actor’s getAllTugboats when the actor is available (actor-gated enabled flag consistent with existing Port of Tema queries). Switch the hook’s Tugboat type to the generated backend type (from the existing backend TypeScript declarations) so the Tugboats page can render backend-provided fields."
         },
         {
-          "path": "frontend/src/pages/berthing/BerthingPage.tsx",
+          "path": "frontend/src/pages/tugboats/TugboatsPage.tsx",
           "operation": "modify",
-          "description": "Within the two selected DOM regions currently occupied by the PortOfTemaOverview and the Berthing Points viewer/filter UI, fully replace rendered content with the new grouped infrastructure cards component. Ensure the previous overview/table/filters/tabs/detail drawer are no longer rendered in those regions, and keep all changes scoped to those regions only."
+          "description": "Wire the updated useTugboats hook into the page-level UI state: show LoadingSkeleton while loading, ErrorState on error, and EmptyState when the returned list is empty. Verify the component's usage instructions before implementing (LoadingSkeleton/ErrorState/EmptyState are from the existing QueryState module)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Replace the selected Tugboats page content area with a responsive card grid that displays only the fetched tugboats.",
+      "acceptanceCriteria": [
+        "The selected content area no longer renders the current header/table/health-drawer content; it renders only tugboat cards.",
+        "Each tugboat is displayed as a Card showing at minimum: ID, Name, Built (year), Bollard pull, Type.",
+        "Cards are laid out responsively (e.g., 1 column on small screens, 2–3 columns on larger screens) with consistent spacing.",
+        "All user-facing text in this new card area is in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/tugboats/TugboatsPage.tsx",
+          "operation": "modify",
+          "description": "Within the existing page container that corresponds to the selected XPath content area, remove the current header/table/health-drawer rendering and replace it with a responsive grid of shadcn-ui Card components, one per tugboat, displaying: ID, Name, Built (year), Bollard pull, and Type. Ensure this area renders nothing else besides the cards (plus the required loading/error/empty states). Verify the component's usage instructions before implementing (use shadcn-ui Card for the card layout)."
         }
       ]
     }

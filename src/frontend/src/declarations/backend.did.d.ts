@@ -27,6 +27,16 @@ export interface PortGeoLocation {
   'description' : string,
   'longitude' : string,
 }
+export interface Tugboat {
+  'id' : bigint,
+  'year_built' : bigint,
+  'engine_power_hp' : bigint,
+  'length_m' : bigint,
+  'flag' : string,
+  'name' : string,
+  'port' : string,
+  'bollard_pull_ton' : bigint,
+}
 export interface _SERVICE {
   'addGeoPoint' : ActorMethod<
     [bigint, string, string, string, string, string],
@@ -45,11 +55,15 @@ export interface _SERVICE {
     bigint
   >,
   'addPortOfTemaData' : ActorMethod<[], undefined>,
+  'addTugboatsForTemaPort' : ActorMethod<[], undefined>,
   'addWarehouse' : ActorMethod<[bigint, string], undefined>,
   'cleanUpBerthingData' : ActorMethod<[], undefined>,
   'getAllPorts' : ActorMethod<[], Array<Port>>,
+  'getAllTugboats' : ActorMethod<[], Array<Tugboat>>,
   'getPortById' : ActorMethod<[bigint], [] | [Port]>,
   'getPortOfTemaData' : ActorMethod<[], Port>,
+  'getTugboatById' : ActorMethod<[bigint], [] | [Tugboat]>,
+  'getTugboatsByPort' : ActorMethod<[string], Array<Tugboat>>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
