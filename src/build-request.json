@@ -1,90 +1,100 @@
 {
   "kind": "build_request",
-  "title": "Add backend-stored tugboat list and display as cards on Tugboats page",
+  "title": "Replace Tugboat page main content with reusable Tema fleet JSON tugboat list",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Backend: Add a dedicated Motoko Tugboat data model and store the provided 6 tugboats in the backend canister so they can be fetched dynamically by the frontend.",
-      "target": "backend",
+      "text": "Create a reusable TugboatList component that renders ALL tugboats from the provided Tema fleet JSON (port/authority/fleet_last_updated plus tugboats array) and displays each tugboat’s full details: id, name, IMO number, year built, type, specifications (bollard pull tonnes, gross tonnage, length, beam, max draught, engine power when present), capabilities, status, and last_maintenance when present.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1",
-          "msg-2"
+          "recent-4",
+          "recent-6"
         ],
         "quotes": [
-          "add these tugboats : \"tugboats\": [ ... ] to tugboat page ... want it stored in the backend canister for dynamic use",
-          "these tugboats as a new dedicated Motoko data type"
+          "within this box and all similar Tugboat page create and display all the following tugboats : json file",
+          "use this Json file : { ... }"
         ]
       },
       "acceptanceCriteria": [
-        "A Motoko Tugboat type exists with fields that can represent: id, name, built, bollard_pull, type.",
-        "The backend canister stores exactly the 6 user-provided tugboats (TUG-01 through TUG-06) in canister state.",
-        "The stored tugboats can be retrieved via a public query method (e.g., getAllTugboats) returning an array of Tugboat records.",
-        "Candid/TypeScript declarations generated for the backend include the Tugboat type and the new query method."
+        "A new reusable React component exists (e.g., under frontend/src/pages/tugboats or frontend/src/components) that takes Tema fleet JSON data and renders all 6 tugboats from the user-provided JSON.",
+        "Each tugboat card/row shows: id, name, IMO number, year built, type, status, and a clearly labeled section for specifications and capabilities.",
+        "Optional fields (e.g., engine_power_kw, last_maintenance) are rendered when present and omitted (without blank placeholders) when absent.",
+        "User-facing text is in English."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Frontend: Implement a React Query hook to fetch the tugboat list from the backend canister on each Tugboats page load, and wire it to the Tugboats page UI state (loading/error/empty).",
+      "text": "Replace ONLY the content within the selected Tugboat page elements (XPath /html[1]/body[1]/div[1]/div[1]/div[1]/main[1] and its first paragraph /html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/p[1]) with the new TugboatList output, so the page shows all results properly without leaving the old placeholder paragraph content.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "recent-7",
+          "user-selection"
         ],
         "quotes": [
-          "dynamically fetch the tugboat list from the backend every time it loads"
+          "start building to show all results properly",
+          "The user has selected the following 2 elements from the page for context. ... The user instructions should be applied ONLY to the elements selected in this prompt."
         ]
       },
       "acceptanceCriteria": [
-        "The tugboat query no longer returns a hard-coded empty array; it calls the backend actor method added in REQ-1.",
-        "The query is enabled only when the backend actor is available (consistent with existing actor-gated queries).",
-        "Loading and error states are displayed using existing QueryState components (LoadingSkeleton/ErrorState), and an empty state is shown when the list is empty."
+        "The Tugboats page no longer renders the previous fleet overview paragraph/content within the selected <main> area; it renders the TugboatList instead.",
+        "All 6 tugboats from the provided JSON are visible on the Tugboats page with responsive layout (works on mobile and desktop without overflow)."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Frontend (selected element only): On the Tugboats page, replace the existing content rendered inside the selected element at XPath /html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1] with a card-based layout that displays the fetched tugboats (and nothing else) as individual cards.",
+      "text": "Make the TugboatList component automatically reusable across tugboat-related pages by integrating it wherever tugboat fleet results are displayed (at minimum, the /tugboats route page), using the same shared component rather than duplicating markup.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1",
-          "msg-2"
+          "recent-6"
         ],
         "quotes": [
-          "data be displayed inside the selected element as cards, replace the element’s existing content",
-          "selected element display only these tugboat cards (replacing all existing content completely)"
+          "yes same tugboat‑list component automatically repeated on every tugboat‑related page"
         ]
       },
       "acceptanceCriteria": [
-        "The selected content area no longer renders the current header/table/health-drawer content; it renders only tugboat cards.",
-        "Each tugboat is displayed as a Card showing at minimum: ID, Name, Built (year), Bollard pull, Type.",
-        "Cards are laid out responsively (e.g., 1 column on small screens, 2–3 columns on larger screens) with consistent spacing.",
-        "All user-facing text in this new card area is in English."
+        "The /tugboats route uses the shared TugboatList component.",
+        "No duplicated tugboat list rendering logic remains in TugboatsPage; it delegates to the shared component.",
+        "If other tugboat-related pages need a fleet list in the future, the component can be imported and used without modification."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Store the provided Tema fleet JSON in the frontend codebase as a dedicated data source (static JSON/TS module) and render from it (not from backend getAllTugboats), ensuring the UI matches the provided JSON fields (e.g., IMO number, capabilities, gross tonnage, beam, max draught).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-5",
+          "recent-6"
+        ],
+        "quotes": [
+          "Which JSON file should be used to populate the tugboats? Please provide it or its structure.",
+          "use this Json file : { ... }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A static frontend data file/module contains the exact provided JSON structure/values.",
+        "The TugboatList renders from this static data and shows fields that are not available in the current backend Tugboat type (e.g., IMO number, capabilities).",
+        "No backend changes are required to display the tugboats from the provided JSON."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend immutable paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui).",
-    "Apply UI changes only to the content rendered within the selected element XPath (/html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]); do not redesign other pages/areas."
+    "Apply changes ONLY within the selected elements: /html[1]/body[1]/div[1]/div[1]/div[1]/main[1] and /html[1]/body[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/p[1].",
+    "Do not edit files under frontend/src/components/ui (read-only).",
+    "Do not edit immutable hook files: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx."
   ],
   "nonGoals": [
-    "Do not implement tugboat create/edit/delete UI or any admin management flows.",
-    "Do not add third-party authentication; use existing Internet Identity integration only if needed (not required for read-only tugboat fetching).",
-    "Do not add real-time updates (WebSockets) or background subscriptions; standard React Query fetching is sufficient."
+    "Do not implement CRUD editing of tugboats.",
+    "Do not add new authentication providers (Internet Identity remains the only supported auth).",
+    "Do not add real-time updates or WebSocket features.",
+    "Do not redesign non-tugboat pages outside the selected <main> area."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

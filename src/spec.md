@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Store a fixed set of 6 tugboats in the backend canister and display them dynamically as responsive cards on the Tugboats page.
+**Goal:** Replace the Tugboats page main content with a reusable list that renders the full Tema fleet tugboat details from a static frontend JSON source.
 
 **Planned changes:**
-- Backend: Add a Motoko `Tugboat` data type (id, name, built, bollard_pull, type) and store exactly 6 predefined tugboats (TUG-01 to TUG-06) in canister state.
-- Backend: Expose a public query method (e.g., `getAllTugboats`) to return the stored tugboats, and ensure Candid/TypeScript declarations include the new type and method.
-- Frontend: Add/update a React Query hook to fetch tugboats from the backend actor on Tugboats page load (actor-gated), with loading/error/empty UI states using existing QueryState components.
-- Frontend: Within the specified Tugboats page content container only, replace existing rendered content with a card grid that shows one card per tugboat (ID, Name, Built, Bollard pull, Type), in English.
+- Add a reusable `TugboatList` React component that takes the Tema fleet JSON and renders all tugboats with full details (id, name, IMO number, year built, type, status, specifications, capabilities, and optional fields when present).
+- Store the provided Tema fleet JSON as a dedicated static data module/file in the frontend and render the UI from it (not from backend tugboat APIs/types).
+- Replace only the selected `<main>` content (including the first paragraph) on the `/tugboats` route to render `TugboatList`, removing the old placeholder paragraph/content and avoiding duplicated list markup.
 
-**User-visible outcome:** The Tugboats page loads tugboats from the backend and shows them as a responsive grid of cards, with clear loading/error/empty states.
+**User-visible outcome:** The Tugboats page shows all 6 tugboats from the provided Tema fleet JSON with their complete details, in English, in a responsive layout without the previous placeholder content.

@@ -1,5 +1,6 @@
 import { KpiCard } from '../../components/common/KpiCard';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { VesselFinderAisMap } from '../../components/common/VesselFinderAisMap';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useVessels, useAssignments, useAlerts } from '../../services/queries';
@@ -111,6 +112,18 @@ export function PortOpsDashboard() {
                 </TableBody>
               </Table>
             )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* VesselFinder AIS Map - Full Bleed Responsive */}
+      <div className="vf-full-bleed">
+        <Card>
+          <CardHeader>
+            <CardTitle>Live Vessel Tracking</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <VesselFinderAisMap className="w-full min-h-[300px]" />
           </CardContent>
         </Card>
       </div>

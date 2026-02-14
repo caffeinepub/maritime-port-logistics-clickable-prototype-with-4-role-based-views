@@ -3,9 +3,9 @@ import Nat "mo:core/Nat";
 import Array "mo:core/Array";
 import List "mo:core/List";
 import Iter "mo:core/Iter";
-import Migration "migration";
 
-(with migration = Migration.run)
+
+
 actor {
   // State
   var lastPortId : Nat = 0;

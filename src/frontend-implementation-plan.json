@@ -1,43 +1,84 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fetch backend tugboats and render card grid on Tugboats page",
+  "title": "Replace Tugboats page main content with reusable Tema fleet JSON tugboat list",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Add a React Query hook that fetches tugboats from the backend actor on Tugboats page load and exposes loading/error/empty UI state.",
+      "id": "REQ-1",
+      "summary": "Create a reusable TugboatList component that renders the full Tema fleet JSON metadata and all tugboat details with proper optional-field handling.",
       "acceptanceCriteria": [
-        "The tugboat query no longer returns a hard-coded empty array; it calls the backend actor method added in REQ-1.",
-        "The query is enabled only when the backend actor is available (consistent with existing actor-gated queries).",
-        "Loading and error states are displayed using existing QueryState components (LoadingSkeleton/ErrorState), and an empty state is shown when the list is empty."
+        "A new reusable React component exists (e.g., under frontend/src/pages/tugboats or frontend/src/components) that takes Tema fleet JSON data and renders all 6 tugboats from the user-provided JSON.",
+        "Each tugboat card/row shows: id, name, IMO number, year built, type, status, and a clearly labeled section for specifications and capabilities.",
+        "Optional fields (e.g., engine_power_kw, last_maintenance) are rendered when present and omitted (without blank placeholders) when absent.",
+        "User-facing text is in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/services/queries.ts",
-          "operation": "modify",
-          "description": "Update the tugboat query hook to call the backend actor’s getAllTugboats when the actor is available (actor-gated enabled flag consistent with existing Port of Tema queries). Switch the hook’s Tugboat type to the generated backend type (from the existing backend TypeScript declarations) so the Tugboats page can render backend-provided fields."
+          "path": "frontend/src/pages/tugboats/TugboatList.tsx",
+          "operation": "create",
+          "description": "Create a reusable TugboatList React component that accepts the Tema fleet JSON object (including port/authority/fleet_last_updated and tugboats array) and renders: fleet header metadata plus a responsive list/grid of tugboats. Each tugboat item must show full details: id, name, IMO number, year built, type, specifications (bollard pull tonnes, gross tonnage, length, beam, max draught, and engine power when present), capabilities, status, and last_maintenance when present. Use existing shadcn-ui primitives (e.g., Card/Badge) only via imports (do not edit frontend/src/components/ui). Verify the component's usage instructions before implementing."
         },
+        {
+          "path": "frontend/src/pages/tugboats/tugboatListTypes.ts",
+          "operation": "create",
+          "description": "Add TypeScript types/interfaces for the static Tema fleet JSON shape used by TugboatList (fleet metadata + tugboats with optional fields) to ensure the component renders only fields present and omits absent optional data."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Replace only the Tugboats page <main> content (including the first paragraph) with the TugboatList output so no placeholder text remains.",
+      "acceptanceCriteria": [
+        "The Tugboats page no longer renders the previous fleet overview paragraph/content within the selected <main> area; it renders the TugboatList instead.",
+        "All 6 tugboats from the provided JSON are visible on the Tugboats page with responsive layout (works on mobile and desktop without overflow)."
+      ],
+      "file_operations": [
         {
           "path": "frontend/src/pages/tugboats/TugboatsPage.tsx",
           "operation": "modify",
-          "description": "Wire the updated useTugboats hook into the page-level UI state: show LoadingSkeleton while loading, ErrorState on error, and EmptyState when the returned list is empty. Verify the component's usage instructions before implementing (LoadingSkeleton/ErrorState/EmptyState are from the existing QueryState module)."
+          "description": "Replace the existing TugboatsPage content rendering (including the current header/paragraph and backend-driven card grid) with a minimal wrapper that renders TugboatList using the static Tema fleet JSON module. Ensure this change only affects what renders inside the page content area (the selected <main> and its first paragraph), removing the old placeholder paragraph content from this page."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Replace the selected Tugboats page content area with a responsive card grid that displays only the fetched tugboats.",
+      "summary": "Ensure the Tugboats route uses the shared TugboatList component so tugboat fleet list markup is not duplicated and remains reusable for future tugboat-related pages.",
       "acceptanceCriteria": [
-        "The selected content area no longer renders the current header/table/health-drawer content; it renders only tugboat cards.",
-        "Each tugboat is displayed as a Card showing at minimum: ID, Name, Built (year), Bollard pull, Type.",
-        "Cards are laid out responsively (e.g., 1 column on small screens, 2–3 columns on larger screens) with consistent spacing.",
-        "All user-facing text in this new card area is in English."
+        "The /tugboats route uses the shared TugboatList component.",
+        "No duplicated tugboat list rendering logic remains in TugboatsPage; it delegates to the shared component.",
+        "If other tugboat-related pages need a fleet list in the future, the component can be imported and used without modification."
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/tugboats/TugboatsPage.tsx",
           "operation": "modify",
-          "description": "Within the existing page container that corresponds to the selected XPath content area, remove the current header/table/health-drawer rendering and replace it with a responsive grid of shadcn-ui Card components, one per tugboat, displaying: ID, Name, Built (year), Bollard pull, and Type. Ensure this area renders nothing else besides the cards (plus the required loading/error/empty states). Verify the component's usage instructions before implementing (use shadcn-ui Card for the card layout)."
+          "description": "Refactor TugboatsPage to delegate all fleet list rendering to the shared TugboatList component (no inline tugboat card/list mapping remains). Keep TugboatsPage as a thin composition layer that imports the shared component and the static fleet data."
+        },
+        {
+          "path": "frontend/src/pages/tugboats/TugboatList.tsx",
+          "operation": "modify",
+          "description": "Structure TugboatList’s public API (props) to be page-agnostic (e.g., accept the fleet JSON object as input) so it can be imported by other tugboat-related pages without modification. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add the provided Tema fleet JSON as a static frontend data module and render tugboats from it (not from backend getAllTugboats), including fields not supported by current backend types.",
+      "acceptanceCriteria": [
+        "A static frontend data file/module contains the exact provided JSON structure/values.",
+        "The TugboatList renders from this static data and shows fields that are not available in the current backend Tugboat type (e.g., IMO number, capabilities).",
+        "No backend changes are required to display the tugboats from the provided JSON."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/data/temaFleet.ts",
+          "operation": "create",
+          "description": "Create a dedicated static frontend data module exporting the exact user-provided Tema fleet JSON object (port/authority/fleet_last_updated plus tugboats array with all provided fields/values). This module will be the single data source for TugboatList and must include fields not present in the backend Tugboat type (e.g., IMO number, capabilities, gross tonnage, beam, max draught)."
+        },
+        {
+          "path": "frontend/src/pages/tugboats/TugboatsPage.tsx",
+          "operation": "modify",
+          "description": "Remove reliance on backend tugboat queries for this page by importing the static Tema fleet data module and passing it into TugboatList. Ensure the page renders purely from static data and does not call backend getAllTugboats for this view."
         }
       ]
     }

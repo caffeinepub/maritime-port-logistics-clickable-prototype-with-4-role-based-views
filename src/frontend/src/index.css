@@ -158,4 +158,29 @@
   .border-harbor-warning {
     border-color: oklch(var(--harbor-warning));
   }
+
+  /* Full-bleed container for VesselFinder map */
+  .vf-full-bleed {
+    width: 100%;
+    position: relative;
+  }
+
+  @media (min-width: 1024px) {
+    .vf-full-bleed {
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+    }
+  }
+
+  /* Ensure no horizontal scroll on mobile */
+  @media (max-width: 1023px) {
+    .vf-full-bleed {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+  }
 }

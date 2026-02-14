@@ -1,58 +1,26 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-11T20:43:41.234Z",
-  "summary": "Frontend now fetches tugboats via a React Query hook calling a backend actor method name (`getAllTugboats`) and TugboatsPage renders a responsive grid of tugboat cards with loading/error/empty states. However, the backend changes shown do not include seeding exactly 6 provided tugboats nor a public `getAllTugboats` query implementation, and the TugboatsPage content includes additional header elements and hard-codes a tugboat “Type” value rather than using a backend-provided field.",
+  "generatedAt": "2026-02-14T14:28:18.726Z",
+  "summary": "Implemented a static Tema fleet data module and a reusable TugboatList component, and updated TugboatsPage to render the list from the static data. However, TugboatsPage still contains a paragraph within its main header area, which may violate the requirement to replace the selected first paragraph content with TugboatList output.",
   "missing_requirements": [
     {
-      "id": "REQ-1",
-      "requirement": "Backend stores exactly the 6 provided tugboats (TUG-01 through TUG-06) in canister state and exposes a public query method (e.g., getAllTugboats) returning an array of Tugboat records; generated candid/TS declarations include the Tugboat type and method.",
-      "reason": "Diff shows a Tugboat type and an empty tugboats map, but no evidence of initializing/storing the 6 user-provided tugboats in canister state and no evidence of an implemented public query method `getAllTugboats` in the backend actor. Also no evidence of candid/TS declaration regeneration in the diff summary.",
+      "id": "REQ-2",
+      "requirement": "Replace ONLY the content within the selected Tugboat page elements (including the first paragraph under the selected <main>) with the new TugboatList output, removing the old placeholder paragraph/content.",
+      "reason": "The updated TugboatsPage still renders a <p> element with descriptive text above the TugboatList, which appears to leave non-list paragraph content in the main area rather than fully replacing the selected first paragraph with TugboatList output.",
       "evidence": [
-        "backend/main.mo",
-        "backend/migration.mo",
-        "frontend/src/services/queries.ts"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "requirement": "Within the selected Tugboats page content area, render only tugboat cards (no header/table/health-drawer content) and each card must show ID, Name, Built (year), Bollard pull, and Type from fetched data.",
-      "reason": "TugboatsPage still renders a page header section (title/description and an image) in addition to the card grid, and the card 'Type' is hard-coded as \"ASD\" rather than coming from a fetched `type` field (the backend Tugboat type shown also does not include a `type` field).",
-      "evidence": [
-        "frontend/src/pages/tugboats/TugboatsPage.tsx",
-        "backend/main.mo"
+        "frontend/src/pages/tugboats/TugboatsPage.tsx"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Added a migration module and expanded backend state/schema (ports + tugboats with additional fields like engine_power_hp, length_m, flag, port) beyond the requested Tugboat fields (id, name, built, bollard_pull, type).",
-      "reason": "REQ-1 only asked for a dedicated Tugboat model with fields to represent id/name/built/bollard_pull/type and storing 6 tugboats; the diff introduces broader schema changes and a migration structure not requested.",
-      "evidence": [
-        "backend/migration.mo",
-        "backend/main.mo"
-      ]
-    },
-    {
-      "description": "Updated unrelated dashboard and vessel detail UI to use tugboat backend fields and added health/utilization simulation logic.",
-      "reason": "BuildRequest focuses on Tugboats page card display and tugboat fetching; changes to MaintenanceDashboard, TugDispatcherDashboard, and VesselDetailPanel are not requested.",
-      "evidence": [
-        "frontend/src/pages/dashboards/MaintenanceDashboard.tsx",
-        "frontend/src/pages/dashboards/TugDispatcherDashboard.tsx",
-        "frontend/src/pages/vessels/VesselDetailPanel.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.74,
+  "hallucinated_features": [],
+  "confidence": 0.64,
   "changed_files": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/pages/dashboards/MaintenanceDashboard.tsx",
-    "frontend/src/pages/dashboards/TugDispatcherDashboard.tsx",
+    "frontend/src/data/temaFleet.ts",
+    "frontend/src/pages/tugboats/TugboatList.tsx",
     "frontend/src/pages/tugboats/TugboatsPage.tsx",
-    "frontend/src/pages/vessels/VesselDetailPanel.tsx",
-    "frontend/src/services/queries.ts",
+    "frontend/src/pages/tugboats/tugboatListTypes.ts",
     "project_state.json"
   ]
 }
